@@ -1,91 +1,87 @@
-Sales Data CDC Pipeline
-📌 Overview
-This project implements a Delta Live Tables (DLT) pipeline in Databricks for processing Customers and Sales data using Change Data Capture (CDC) logic.
-The pipeline loads, transforms, and maintains data in Bronze, Silver, and Gold layers for analytics and reporting.
+# 🛠 Databricks Delta Live Tables (DLT) Pipeline
 
-🏗 Pipeline Structure
-The pipeline follows a medallion architecture:
+## 📌 Project Overview
+This project implements a **Databricks Delta Live Tables (DLT)** pipeline to ingest, transform, and serve data for analytics.  
+It follows a **Medallion Architecture** approach with **Bronze → Silver → Gold** layers, ensuring data quality, lineage, and scalability.
 
-1. Bronze Layer
-Ingests raw data from the source system (CSV/Parquet/Delta).
+---
 
-Stores unmodified data for traceability.
+## 🏗 Pipeline Structure
+┌────────────┐
+│ Bronze │ → Raw data ingestion from source
+└─────┬──────┘
+↓
+┌────────────┐
+│ Silver │ → Data cleaning, joining, and enrichment
+└─────┬──────┘
+↓
+┌────────────┐
+│ Gold │ → Curated datasets for analytics & BI
+└────────────┘
 
-Supports CDC ingestion with apply_changes.
+---
 
-2. Silver Layer
-Cleans, filters, and deduplicates data.
+## 🗂 Pipeline Tasks
+### 1. **Bronze Layer**
+- Ingest raw **Customers** and **Sales** data from the source.
+- Store as Delta tables for further processing.
 
-Applies CDC merge logic using APPLY CHANGES INTO.
+### 2. **Silver Layer**
+- Apply cleaning and standardization.
+- Enrich data with derived fields.
+- Implement **CDC (Change Data Capture)** logic to handle incremental updates.
 
-Prepares standardized customers_silver and sales_silver tables.
+### 3. **Gold Layer**
+- Create final curated datasets ready for reporting and dashboards.
+- Join multiple datasets (if applicable) or prepare them for BI tools.
 
-3. Gold Layer
-Aggregates and enriches data for analytics.
+---
 
-Produces KPI-focused tables (e.g., sales by region, customer activity).
+## ⚙️ Technology Stack
+- **Databricks** (Delta Live Tables)
+- **PySpark**
+- **Delta Lake**
+- **Medallion Architecture**
 
-Ready for BI dashboards (e.g., Power BI, Tableau, Databricks SQL).
+---
 
-⚙ Technologies Used
-Databricks Delta Live Tables (DLT)
+## 📁 Project Structure
+DLT_Pipeline/
+├── bronze_layer.py # Ingest raw data
+├── silver_layer.py # Clean & transform
+├── gold_layer.py # Create curated datasets
 
-Databricks SQL
 
-Change Data Capture (CDC)
+---
 
-Medallion Architecture
+## 🚀 Getting Started
+### 1. Import Pipeline
+- Import the `.dbc` file into your Databricks workspace.
 
-Delta Lake
+### 2. Configure Cluster
+- Use a **DLT-compatible cluster**.
+- Enable **Photon** for performance optimization.
 
-🚀 How to Run
-Import the Pipeline
+### 3. Run the Pipeline
+- Go to **Workflows → Delta Live Tables**.
+- Create a new pipeline and select the imported notebooks.
+- Configure source paths and target database names.
+- Click **Start** to run the pipeline.
 
-In Databricks, go to Workflows → Delta Live Tables → Create Pipeline.
+---
 
-Import the .dbc file provided in this repo.
+## 🔄 Change Data Capture (CDC)
+- CDC is implemented using the `MERGE INTO` syntax in Delta Lake.
+- Ensures that only new or updated records are processed.
 
-Configure Pipeline Settings
+---
 
-Name: salesdata_cdc_pipeline
+## 📊 Example Output
+- **Bronze:** `bronze_customers`, `bronze_sales`
+- **Silver:** `silver_customers_clean`, `silver_sales_enriched`
+- **Gold:** `gold_customer_sales_summary`
 
-Source: Set your source dataset location in the configuration.
+---
 
-Target Schema: Set your database/schema for storing results.
-
-Start the Pipeline
-
-Click Start to begin ingestion and transformation.
-
-DLT will manage dependencies and data freshness automatically.
-
-🗂 Output Tables
-Bronze:
-
-customers_bronze
-
-sales_bronze
-
-Silver:
-
-customers_silver
-
-sales_silver
-
-Gold:
-
-sales_summary_gold
-
-customer_sales_gold
-
-📈 Example Use Cases
-Track customer activity over time.
-
-Analyze sales trends with CDC-updated data.
-
-Feed aggregated sales insights to BI dashboards.
-
-📝 Notes
-CDC logic ensures only changed data is processed, improving efficiency.
-
-Gold layer tables are optimized for fast querying.
+## 📜 License
+This project is licensed under the MIT License.
